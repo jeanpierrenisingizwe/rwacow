@@ -1,0 +1,7 @@
+# Force Railway/Nixpacks to use npm install (not npm ci),
+# so optional native deps (better-sqlite3) can be skipped if they fail.
+[phases.install]
+cmds = ["npm install --omit=optional --no-audit --no-fund"]
+
+[start]
+cmd = "node src/index.js"
