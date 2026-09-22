@@ -339,6 +339,11 @@ const CowDetailPage: React.FC = () => {
                         <option key={o.id} value={o.id}>{o.full_name} ({o.national_id})</option>
                       ))}
                     </select>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {language === 'en'
+                        ? "The cow moves to the new owner's registered address automatically."
+                        : "Inka yimukira ku aderesi ya nyir'inka mushya yanditse mu buryo bwikoresha."}
+                    </p>
                   </div>
                   <div>
                     <label className="text-xs text-gray-600">{t('salePrice')}</label>

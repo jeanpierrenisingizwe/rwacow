@@ -67,8 +67,15 @@ const transferOwnership = async (req, res) => {
       }
     }
 
+    // ── Resolve the cow's new location ────────────────
+    // Priority:
+    //   1. A new location explicitly entered in the transfer form
+    //   2. The new owner's own registered location (if they're already in the system)
+    //   3. Fall back to the cow's current location
     let new_location_id = cow.current_location_id;
+
     if (new_location && new_location.district) {
+      // (1) A location was typed in — create and use it
       const locId = crypto.randomUUID();
       await client.query(
         `INSERT INTO locations (id, province, district, sector, cell, village, latitude, longitude)
@@ -78,6 +85,15 @@ const transferOwnership = async (req, res) => {
          new_location.latitude || null, new_location.longitude || null]
       );
       new_location_id = locId;
+    } else {
+      // (2) No location entered — inherit the new owner's registered location
+      const ownerRow = await client.query(
+        'SELECT location_id FROM owners WHERE id = ?', [to_owner_id]
+      );
+      if (ownerRow.rows.length > 0 && ownerRow.rows[0].location_id) {
+        new_location_id = ownerRow.rows[0].location_id;
+      }
+      // (3) else: keep cow.current_location_id (already the default)
     }
 
     // Record the transfer
