@@ -40,6 +40,10 @@ export const translations: Record<Language, Record<string, string>> = {
     sold: 'Sold',
     slaughtered: 'Slaughtered',
     dead: 'Dead',
+    pending: 'Pending',
+    rejected: 'Rejected',
+    approved: 'Approved',
+    approvals: 'Approvals',
     // Location
     province: 'Province',
     district: 'District',
@@ -141,6 +145,10 @@ export const translations: Record<Language, Record<string, string>> = {
     sold: 'Yaragurishijwe',
     slaughtered: 'Yarabazwe',
     dead: 'Yarapfuye',
+    pending: 'Bitegereje',
+    rejected: 'Byanzwe',
+    approved: 'Byemejwe',
+    approvals: 'Kwemeza',
     // Aho iherereye (Location)
     province: 'Intara',
     district: 'Akarere',

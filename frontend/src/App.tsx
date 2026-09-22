@@ -16,6 +16,7 @@ import OffspringPage from './pages/OffspringPage';
 import SlaughterPage from './pages/SlaughterPage';
 import TransfersPage from './pages/TransfersPage';
 import ExportPage from './pages/ExportPage';
+import ApprovalsPage from './pages/ApprovalsPage';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 1000 * 60 } }
@@ -27,6 +28,7 @@ const ROUTE_ROLES: Record<string, string[]> = {
   slaughter:   ['admin', 'government', 'slaughterhouse'],
   transfers:   ['admin', 'government', 'farmer'],
   export:      ['admin', 'government', 'vet', 'farmer'],
+  approvals:   ['admin', 'government'],
 };
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; page?: string }> = ({ children, page }) => {
@@ -81,6 +83,9 @@ function App() {
                 } />
                 <Route path="export" element={
                   <ProtectedRoute page="export"><ExportPage /></ProtectedRoute>
+                } />
+                <Route path="approvals" element={
+                  <ProtectedRoute page="approvals"><ApprovalsPage /></ProtectedRoute>
                 } />
               </Route>
 

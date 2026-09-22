@@ -10,6 +10,7 @@ const offspringRoutes = require('./routes/offspring.routes');
 const slaughterRoutes = require('./routes/slaughter.routes');
 const transferRoutes = require('./routes/transfer.routes');
 const exportRoutes = require('./routes/export.routes');
+const ensureApprovalColumns = require('./database/ensureApprovalColumns');
 
 const app = express();
 
@@ -53,8 +54,10 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
+  // Ensure approval-workflow columns exist (safe, idempotent)
+  await ensureApprovalColumns();
 });
 
 module.exports = app;

@@ -46,14 +46,18 @@ const CowsPage: React.FC = () => {
   });
 
   const [formError, setFormError] = useState('');
+  const [banner, setBanner] = useState('');
 
   const createMutation = useMutation({
     mutationFn: (data: any) => api.post('/cows', data),
-    onSuccess: () => {
+    onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ['cows'] });
       queryClient.invalidateQueries({ queryKey: ['cow-stats'] });
       setShowForm(false);
       setFormError('');
+      // Farmer submissions are pending approval — inform them
+      const msg = res?.data?.message;
+      if (msg) { setBanner(msg); setTimeout(() => setBanner(''), 6000); }
       setForm({
         tag_number: '', name: '', breed: '', gender: 'female',
         date_of_birth: '', color: '', weight_kg: '', notes: '', current_owner_id: '',
@@ -92,6 +96,13 @@ const CowsPage: React.FC = () => {
           <Plus size={16} /> {t('addCow')}
         </button>
       </div>
+
+      {/* Submission banner (e.g. "submitted for approval") */}
+      {banner && (
+        <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+          <span>⏳</span><span>{banner}</span>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="flex gap-3 flex-wrap">
@@ -144,9 +155,24 @@ const CowsPage: React.FC = () => {
                     <td className="px-4 py-3">{cow.owner_name || '—'}</td>
                     <td className="px-4 py-3">{cow.district ? `${cow.district}${cow.sector ? ', ' + cow.sector : ''}` : '—'}</td>
                     <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusBadge(cow.status)}`}>
-                        {t(cow.status)}
-                      </span>
+                      {cow.approval_status && cow.approval_status !== 'approved' ? (
+                        <span
+                          title={cow.approval_status === 'rejected' ? cow.rejection_reason : ''}
+                          className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            cow.approval_status === 'pending'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
+                          }`}
+                        >
+                          {cow.approval_status === 'pending'
+                            ? (t('pending') || 'Pending')
+                            : (t('rejected') || 'Rejected')}
+                        </span>
+                      ) : (
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusBadge(cow.status)}`}>
+                          {t(cow.status)}
+                        </span>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <button

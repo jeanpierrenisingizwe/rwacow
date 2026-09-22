@@ -3,8 +3,10 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Beef, Users, Syringe, Baby,
   Scissors, ArrowLeftRight, LogOut, Menu, X, Globe,
-  Download, Shield
+  Download, Shield, ClipboardCheck
 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import { isDemoMode } from '../services/api';
@@ -13,6 +15,7 @@ import { isDemoMode } from '../services/api';
 const NAV_PERMISSIONS: Record<string, string[]> = {
   dashboard:   ['admin','government','vet','farmer','slaughterhouse'],
   cows:        ['admin','government','vet','farmer','slaughterhouse'],
+  approvals:   ['admin','government'],
   owners:      ['admin','government','vet'],
   vaccinations:['admin','government','vet','farmer'],
   offspring:   ['admin','government','vet','farmer'],
@@ -30,10 +33,21 @@ const Layout: React.FC = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const role = user?.role || 'farmer';
+  const isReviewer = role === 'admin' || role === 'government';
+
+  // Live count of cows awaiting approval (reviewers only)
+  const { data: pendingData } = useQuery({
+    queryKey: ['pending-count'],
+    queryFn: () => api.get('/cows/pending/count').then(r => r.data),
+    enabled: isReviewer,
+    refetchInterval: 30000, // refresh every 30s
+  });
+  const pendingCount = pendingData?.count || 0;
 
   const allNavItems = [
     { to: '/dashboard',   icon: LayoutDashboard, key: 'dashboard',    label: t('dashboard') },
     { to: '/cows',        icon: Beef,            key: 'cows',         label: t('cows') },
+    { to: '/approvals',   icon: ClipboardCheck,  key: 'approvals',    label: t('approvals'), badge: pendingCount },
     { to: '/owners',      icon: Users,           key: 'owners',       label: t('owners') },
     { to: '/vaccinations',icon: Syringe,         key: 'vaccinations', label: t('vaccinations') },
     { to: '/offspring',   icon: Baby,            key: 'offspring',    label: t('offspring') },
@@ -82,13 +96,19 @@ const Layout: React.FC = () => {
 
         {/* Nav */}
         <nav className="flex-1 px-2 py-4 space-y-0.5 overflow-y-auto">
-          {navItems.map(({ to, icon: Icon, label }) => (
+          {navItems.map(({ to, icon: Icon, label, badge }: any) => (
             <NavLink key={to} to={to} onClick={() => setSidebarOpen(false)}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                 ${isActive ? 'bg-green-700 text-white' : 'text-green-100 hover:bg-green-800'}`
               }>
-              <Icon size={18} />{label}
+              <Icon size={18} />
+              <span className="flex-1">{label}</span>
+              {badge > 0 && (
+                <span className="bg-yellow-400 text-green-950 text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                  {badge}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>

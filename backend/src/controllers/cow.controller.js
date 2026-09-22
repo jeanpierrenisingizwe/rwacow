@@ -9,6 +9,7 @@ const getAllCows = async (req, res) => {
     let query = `
       SELECT c.id, c.tag_number, c.name, c.breed, c.gender, c.date_of_birth,
         c.color, c.weight_kg, c.status, c.notes, c.created_at,
+        c.approval_status, c.rejection_reason,
         o.full_name AS owner_name, o.phone AS owner_phone,
         l.province, l.district, l.sector, l.cell, l.village, l.latitude, l.longitude
     `;
@@ -35,6 +36,7 @@ const getAllCows = async (req, res) => {
     }
 
     if (status) { query += ` AND c.status = ?`; params.push(status); idx++; }
+    if (req.query.approval_status) { query += ` AND c.approval_status = ?`; params.push(req.query.approval_status); idx++; }
     if (owner_id && perms.canReadAll) { query += ` AND c.current_owner_id = ?`; params.push(owner_id); idx++; }
     if (district) { query += ` AND l.district LIKE ?`; params.push(`%${district}%`); idx++; }
     if (search) {
@@ -195,19 +197,30 @@ const createCow = async (req, res) => {
       return res.status(400).json({ error: 'An owner must be selected for this cow' });
     }
 
+    // ── Approval status ───────────────────────────────
+    // Farmers' registrations are PENDING until an authority approves.
+    // Admin/Government register directly as APPROVED.
+    const approval_status = req.user.role === 'farmer' ? 'pending' : 'approved';
+
     // ── Create the cow ────────────────────────────────
     const cowId = crypto.randomUUID();
     await client.query(
       `INSERT INTO cows (id, tag_number, name, breed, gender, date_of_birth, color, weight_kg,
-        current_owner_id, current_location_id, mother_id, notes)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
+        current_owner_id, current_location_id, mother_id, notes, approval_status, submitted_by)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [cowId, tag_number, name || null, breed || null, gender || null,
        date_of_birth || null, color || null, weight_kg || null,
-       current_owner_id, location_id, mother_id || null, notes || null]
+       current_owner_id, location_id, mother_id || null, notes || null,
+       approval_status, req.user.id]
     );
     const result = await client.query('SELECT * FROM cows WHERE id = ?', [cowId]);
     await client.query('COMMIT');
-    res.status(201).json(result.rows[0]);
+    res.status(201).json({
+      ...result.rows[0],
+      message: approval_status === 'pending'
+        ? 'Cow submitted for approval. An official will review it.'
+        : 'Cow registered successfully.',
+    });
   } catch (err) {
     await client.query('ROLLBACK');
     console.error('Create cow error:', err);
@@ -260,12 +273,12 @@ const getCowStats = async (req, res) => {
     };
 
     const total = await pool.query(
-      `SELECT COUNT(*) as cnt FROM cows c WHERE c.status = 'active' ${ownerFilter}`, params
+      `SELECT COUNT(*) as cnt FROM cows c WHERE c.status = 'active' AND c.approval_status = 'approved' ${ownerFilter}`, params
     );
     const byDistrict = await pool.query(
       `SELECT l.district, COUNT(c.id) as cnt
        FROM cows c JOIN locations l ON c.current_location_id = l.id
-       WHERE c.status = 'active' ${ownerFilter}
+       WHERE c.status = 'active' AND c.approval_status = 'approved' ${ownerFilter}
        GROUP BY l.district ORDER BY cnt DESC`, params
     );
     const vaccinated = await pool.query(`SELECT COUNT(DISTINCT cow_id) as cnt FROM vaccinations`);
@@ -291,4 +304,87 @@ const getCowStats = async (req, res) => {
   }
 };
 
-module.exports = { getAllCows, getCowById, createCow, updateCow, getCowStats };
+/* ─────────────────────────────────────────────
+   APPROVAL WORKFLOW
+───────────────────────────────────────────── */
+
+// List cows awaiting review (admin / government only)
+const getPendingCows = async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT c.id, c.tag_number, c.name, c.breed, c.gender, c.date_of_birth,
+        c.color, c.weight_kg, c.notes, c.created_at, c.approval_status,
+        o.full_name AS owner_name, o.phone AS owner_phone, o.national_id AS owner_national_id,
+        l.province, l.district, l.sector, l.cell, l.village,
+        u.full_name AS submitted_by_name
+       FROM cows c
+       LEFT JOIN owners o ON c.current_owner_id = o.id
+       LEFT JOIN locations l ON c.current_location_id = l.id
+       LEFT JOIN users u ON c.submitted_by = u.id
+       WHERE c.approval_status = 'pending'
+       ORDER BY c.created_at ASC`
+    );
+    res.json({ cows: result.rows, total: result.rows.length });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch pending cows' });
+  }
+};
+
+// Approve a pending cow
+const approveCow = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const cow = await pool.query('SELECT approval_status FROM cows WHERE id = ?', [id]);
+    if (cow.rows.length === 0) return res.status(404).json({ error: 'Cow not found' });
+
+    await pool.query(
+      `UPDATE cows SET approval_status = 'approved', reviewed_by = ?, reviewed_at = datetime('now'),
+        rejection_reason = NULL, updated_at = datetime('now') WHERE id = ?`,
+      [req.user.id, id]
+    );
+    res.json({ message: 'Cow approved successfully', id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to approve cow' });
+  }
+};
+
+// Reject a pending cow (with a reason)
+const rejectCow = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+    const cow = await pool.query('SELECT approval_status FROM cows WHERE id = ?', [id]);
+    if (cow.rows.length === 0) return res.status(404).json({ error: 'Cow not found' });
+
+    await pool.query(
+      `UPDATE cows SET approval_status = 'rejected', reviewed_by = ?, reviewed_at = datetime('now'),
+        rejection_reason = ?, updated_at = datetime('now') WHERE id = ?`,
+      [req.user.id, reason || 'No reason provided', id]
+    );
+    res.json({ message: 'Cow rejected', id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to reject cow' });
+  }
+};
+
+// Count of pending cows (for the review badge)
+const getPendingCount = async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT COUNT(*) AS cnt FROM cows WHERE approval_status = 'pending'`
+    );
+    const row = result.rows[0];
+    const count = parseInt(String(row.cnt ?? row.count ?? 0), 10) || 0;
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch pending count' });
+  }
+};
+
+module.exports = {
+  getAllCows, getCowById, createCow, updateCow, getCowStats,
+  getPendingCows, approveCow, rejectCow, getPendingCount,
+};

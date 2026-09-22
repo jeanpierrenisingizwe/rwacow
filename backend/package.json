@@ -10,6 +10,7 @@
     "db:seed": "node src/database/seed.js",
     "mysql:migrate": "node src/database/migrate.mysql.js",
     "mysql:seed": "node src/database/seed.mysql.js",
+    "mysql:add-approval": "node src/database/add-approval.mysql.js",
     "deploy:setup": "node src/database/migrate.mysql.js && node src/database/seed.mysql.js"
   },
   "engines": {
