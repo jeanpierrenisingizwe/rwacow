@@ -5,21 +5,25 @@ const crypto = require('crypto');
 const getSlaughterRecords = async (req, res) => {
   try {
     const { status, district } = req.query;
+    // origin_* = where the cow comes from (its current location + owner at time of record)
     let query = `
-      SELECT s.*, c.tag_number, c.name AS cow_name, c.breed,
-        o.full_name AS owner_name, o.phone AS owner_phone,
-        l.district, l.sector,
+      SELECT s.*, c.tag_number, c.name AS cow_name, c.breed, c.gender, c.color, c.weight_kg,
+        o.full_name AS owner_name, o.phone AS owner_phone, o.national_id AS owner_national_id,
+        ol.province AS origin_province, ol.district AS origin_district,
+        ol.sector AS origin_sector, ol.cell AS origin_cell, ol.village AS origin_village,
+        sl.district AS slaughterhouse_district, sl.sector AS slaughterhouse_sector,
         u.full_name AS registered_by_name
       FROM slaughter_records s
       JOIN cows c ON s.cow_id = c.id
       LEFT JOIN owners o ON s.owner_id = o.id
-      LEFT JOIN locations l ON s.slaughterhouse_location_id = l.id
+      LEFT JOIN locations ol ON c.current_location_id = ol.id
+      LEFT JOIN locations sl ON s.slaughterhouse_location_id = sl.id
       LEFT JOIN users u ON s.registered_by = u.id
       WHERE 1=1
     `;
     const params = [];
     if (status) { query += ` AND s.status = ?`; params.push(status); }
-    if (district) { query += ` AND l.district LIKE ?`; params.push(`%${district}%`); }
+    if (district) { query += ` AND ol.district LIKE ?`; params.push(`%${district}%`); }
     query += ' ORDER BY s.created_at DESC';
     const result = await pool.query(query, params);
     res.json({ records: result.rows, total: result.rows.length });

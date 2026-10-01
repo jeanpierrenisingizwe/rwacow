@@ -42,8 +42,8 @@ export const DEMO_OFFSPRING = [
 ];
 
 export const DEMO_SLAUGHTER = [
-  { id: 'sla-001', cow_id: 'cow-006', tag_number: 'RW-2024-006', cow_name: 'Gahire', breed: 'Ankole', owner_name: 'Nshimiyimana Paul', owner_phone: '+250780111004', scheduled_date: '2024-05-10', slaughter_date: '2024-05-10', meat_weight_kg: 210, status: 'completed', district: 'Karongi', sector: 'Bwishyura', reason: 'Commercial sale', registered_by_name: 'Demo Admin' },
-  { id: 'sla-002', cow_id: 'cow-004', tag_number: 'RW-2024-004', cow_name: 'Umutoni', breed: 'Sahiwal', owner_name: 'Mukamana Alice', owner_phone: '+250780111003', scheduled_date: '2026-09-15', slaughter_date: null, meat_weight_kg: null, status: 'scheduled', district: 'Huye', sector: 'Ngoma', reason: 'Age', registered_by_name: 'Demo Admin' },
+  { id: 'sla-001', cow_id: 'cow-006', tag_number: 'RW-2024-006', cow_name: 'Gahire', breed: 'Ankole', gender: 'male', weight_kg: 470, owner_name: 'Nshimiyimana Paul', owner_phone: '+250780111004', owner_national_id: '1197920456789012', scheduled_date: '2024-05-10', slaughter_date: '2024-05-10', meat_weight_kg: 210, status: 'completed', reason: 'Commercial sale', origin_province: 'Western', origin_district: 'Karongi', origin_sector: 'Bwishyura', origin_cell: 'Kirambo', origin_village: 'Gacura', registered_by_name: 'Demo Admin' },
+  { id: 'sla-002', cow_id: 'cow-004', tag_number: 'RW-2024-004', cow_name: 'Umutoni', breed: 'Sahiwal', gender: 'female', weight_kg: 320, owner_name: 'Mukamana Alice', owner_phone: '+250780111003', owner_national_id: '1200140345678901', scheduled_date: '2026-09-15', slaughter_date: null, meat_weight_kg: null, status: 'scheduled', reason: 'Age', origin_province: 'Southern', origin_district: 'Huye', origin_sector: 'Ngoma', origin_cell: 'Butare', origin_village: 'Kabutare', registered_by_name: 'Demo Admin' },
 ];
 
 export const DEMO_TRANSFERS = [
