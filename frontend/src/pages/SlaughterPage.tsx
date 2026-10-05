@@ -85,8 +85,8 @@ const SlaughterPage: React.FC = () => {
   });
 
   const authLabel = (s: string) =>
-    s === 'authorized' ? (L === 'en' ? 'Vet Authorized' : 'Muganga Yemeje')
-    : s === 'rejected' ? (L === 'en' ? 'Vet Rejected' : 'Muganga Yanze')
+    s === 'authorized' ? (L === 'en' ? 'Vet Authorized' : 'Muganga Yaremeje')
+    : s === 'rejected' ? (L === 'en' ? 'Vet Rejected' : 'Muganga Yabyanze')
     : (L === 'en' ? 'Awaiting Vet' : 'Itegereje Muganga');
 
   return (
@@ -104,11 +104,11 @@ const SlaughterPage: React.FC = () => {
       {/* Workflow explainer */}
       <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 text-xs text-blue-800 flex items-center gap-2 flex-wrap">
         <span className="font-semibold">{L === 'en' ? 'Workflow:' : 'Uko bigenda:'}</span>
-        <span className="bg-white px-2 py-0.5 rounded-full border border-blue-200">1. {L === 'en' ? 'Slaughterhouse registers' : 'Ababaga bandika'}</span>
+        <span className="bg-white px-2 py-0.5 rounded-full border border-blue-200">1. {L === 'en' ? 'Slaughterhouse registers' : 'Ababaga barayandika'}</span>
         <span>→</span>
-        <span className="bg-white px-2 py-0.5 rounded-full border border-blue-200">2. {L === 'en' ? 'Vet authorizes' : 'Muganga yemeza'}</span>
+        <span className="bg-white px-2 py-0.5 rounded-full border border-blue-200">2. {L === 'en' ? 'Vet authorizes' : 'Muganga aremeza'}</span>
         <span>→</span>
-        <span className="bg-white px-2 py-0.5 rounded-full border border-blue-200">3. {L === 'en' ? 'Slaughter confirmed' : 'Kubaga byemezwa'}</span>
+        <span className="bg-white px-2 py-0.5 rounded-full border border-blue-200">3. {L === 'en' ? 'Slaughter confirmed' : 'Kubaga biremezwa'}</span>
       </div>
 
       {banner && (
@@ -195,7 +195,7 @@ const SlaughterPage: React.FC = () => {
                       {/* Waiting indicator for slaughterhouse */}
                       {canConfirm && r.authorization_status === 'pending' && (
                         <span className="flex items-center gap-1 text-xs text-orange-500 whitespace-nowrap">
-                          <Clock size={13} /> {L === 'en' ? 'Awaiting vet' : 'Ategereje muganga'}
+                          <Clock size={13} /> {L === 'en' ? 'Awaiting vet' : 'Itegereje muganga'}
                         </span>
                       )}
                     </td>

@@ -70,7 +70,7 @@ const ApprovalsPage: React.FC = () => {
       )}
 
       {isLoading ? (
-        <div className="text-center py-16 text-gray-400">{L === 'en' ? 'Loading…' : 'Biracyapakira…'}</div>
+        <div className="text-center py-16 text-gray-400">{L === 'en' ? 'Loading…' : 'Tegereza gato…'}</div>
       ) : cows.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
           <CheckCircle className="mx-auto text-green-400 mb-3" size={40} />

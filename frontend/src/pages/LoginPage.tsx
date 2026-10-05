@@ -11,7 +11,7 @@ const ROLES = [
   { value: 'farmer',         en: '🌾 Farmer',             rw: '🌾 Umworozi' },
   { value: 'vet',            en: '🩺 Veterinarian',       rw: "🩺 Muganga w'Amatungo" },
   { value: 'government',     en: '🏛️ Government Official', rw: '🏛️ Umukozi wa Leta' },
-  { value: 'slaughterhouse', en: '🏭 Slaughterhouse',     rw: "🏭 Ubwicanyi bw'Amatungo" },
+  { value: 'slaughterhouse', en: '🏭 Slaughterhouse',     rw: '🏭 Ababaga Amatungo' },
 ];
 
 const AuthPage: React.FC = () => {

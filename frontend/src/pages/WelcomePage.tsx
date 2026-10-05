@@ -8,72 +8,72 @@ const features = [
     en: 'Cow Registration',
     rw: 'Kwandika Inka',
     descEn: 'Register every cow with a unique tag, breed, gender, color, weight and date of birth.',
-    descRw: 'Andika inka yose ifite inomero ihariye, ubwoko, igitsina, irangi, ibiro n\'itariki y\'kuvuka.',
+    descRw: 'Andika buri nka ifite nimero y\'ikirango yihariye, ubwoko, igitsina, ibara, ibiro n\'itariki y\'amavuko.',
   },
   {
     emoji: '👤',
     en: 'Owner Management',
-    rw: 'Gucunga Abafite Inka',
+    rw: 'Gucunga Ba Nyir\'inka',
     descEn: 'Track every owner by national ID, phone, and location across Rwanda\'s administrative divisions.',
-    descRw: 'Kurikirana nyirinka wese ukoresheje indangamuntu, telefoni, n\'aho atuye mu Rwanda.',
+    descRw: 'Kurikirana buri nyir\'inka ukoresheje indangamuntu, telefoni, n\'aho atuye mu Rwanda.',
   },
   {
     emoji: '📍',
     en: 'Location Tracking',
-    rw: 'Gukurikirana Aho Inka Iri',
+    rw: 'Gukurikirana Aho Inka Iherereye',
     descEn: 'Know exactly where each cow is — Province, District, Sector, Cell, Village.',
-    descRw: 'Menya aho inka iri — Intara, Akarere, Umurenge, Akagari, Umudugudu.',
+    descRw: 'Menya neza aho buri nka iherereye — Intara, Akarere, Umurenge, Akagari, Umudugudu.',
   },
   {
     emoji: '💉',
     en: 'Vaccination Records',
-    rw: 'Inkinga z\'Inka',
+    rw: 'Amakuru y\'Inkingo',
     descEn: 'Record every vaccine given, the date administered, and when the next dose is due.',
-    descRw: 'Andika inkinga zose zahawe, itariki, n\'igihe izakurikira.',
+    descRw: 'Andika buri rukingo rwatanzwe, itariki rwatangiweho, n\'igihe urukingo rukurikira ruzatangirwa.',
   },
   {
     emoji: '🐣',
     en: 'Offspring Tracking (Izakomotse)',
-    rw: 'Gukurikirana Izakomotse',
+    rw: 'Gukurikirana Inyana (Izakomotse)',
     descEn: 'Record every calf born — linked to its mother, with birth date and weight.',
-    descRw: 'Andika inyana yose yakomotse — ishamikiye ku nyina yayo, hamwe n\'itariki n\'ibiro byo kuvuka.',
+    descRw: 'Andika buri nyana yavutse — ihujwe na nyina wayo, hamwe n\'itariki n\'ibiro byo kuvuka.',
   },
   {
     emoji: '🔪',
     en: 'Slaughter Records (Izabazwe)',
-    rw: 'Inka Zibazwa',
+    rw: 'Amakuru y\'Inka Zibagwa (Izabazwe)',
     descEn: 'Schedule and confirm slaughter events, record meat weight, and maintain full audit trails.',
-    descRw: 'Teganya no kwemeza kubazwa kw\'inka, wandike ibiro by\'inyama, ubone amakuru yose.',
+    descRw: 'Andika inka zigiye kubagwa, wemeze ko zabazwe, wandike ibiro by\'inyama, ubike amateka yose.',
   },
   {
     emoji: '🔄',
     en: 'Ownership Transfers',
-    rw: 'Guhindura Nyirazo',
+    rw: 'Guhererekanya Inka',
     descEn: 'When a cow is sold, re-register it to the new owner with full transfer history.',
-    descRw: 'Iyo inka yaguzwe, iyandikishe ku nyirazo mushya hamwe n\'amateka yose.',
+    descRw: 'Iyo inka iguzwe, iyandikishe kuri nyir\'inka mushya hamwe n\'amateka yose y\'uko yahererekanyijwe.',
   },
   {
     emoji: '🔐',
     en: 'Role-Based Access',
-    rw: 'Uburenganzira Bw\'Inshingano',
+    rw: 'Uburenganzira Bushingiye ku Nshingano',
     descEn: 'Different access levels for Farmers, Vets, Government Officials and Slaughterhouses.',
-    descRw: 'Uburenganzira butandukanye ku Abahinzi, Abaganga b\'Amatungo, Abakozi ba Leta n\'Inzabutso.',
+    descRw: 'Uburenganzira butandukanye ku Borozi, Abaganga b\'Amatungo, Abakozi ba Leta n\'Ababaga.',
   },
 ];
 
 const roles = [
-  { emoji: '🌾', en: 'Farmer', rw: 'Umuhinzi', descEn: 'Register your cows, record births, transfer ownership.', descRw: 'Andika inka zawe, injira amakomotse, hindura nyirazo.' },
-  { emoji: '🩺', en: 'Veterinarian', rw: 'Umuganga w\'Amatungo', descEn: 'Record vaccinations and health updates for all cattle.', descRw: 'Andika inkinga n\'impinduka z\'ubuzima bw\'inka zose.' },
+  { emoji: '🌾', en: 'Farmer', rw: 'Umworozi', descEn: 'Register your cows, record births, transfer ownership.', descRw: 'Andika inka zawe, wandike inyana zavutse, uhererekanye inka.' },
+  { emoji: '🩺', en: 'Veterinarian', rw: 'Muganga w\'Amatungo', descEn: 'Record vaccinations and health updates for all cattle.', descRw: 'Andika inkingo n\'amakuru y\'ubuzima bw\'inka zose.' },
   { emoji: '🏛️', en: 'Government Official', rw: 'Umukozi wa Leta', descEn: 'Oversee all livestock data across districts and provinces.', descRw: 'Genzura amakuru yose y\'amatungo mu turere no mu ntara.' },
-  { emoji: '🏭', en: 'Slaughterhouse', rw: 'Inzabutso', descEn: 'Schedule and confirm cattle slaughter records.', descRw: 'Teganya no kwemeza amakuru y\'inka zibazwa.' },
+  { emoji: '🏭', en: 'Slaughterhouse', rw: 'Ababaga Amatungo', descEn: 'Schedule and confirm cattle slaughter records.', descRw: 'Andika kandi wemeze amakuru y\'inka zibagwa.' },
 ];
 
 const steps = [
   { num: '01', en: 'Register your account', rw: 'Iyandikishe konti yawe' },
-  { num: '02', en: 'Add owners & locations', rw: 'Ongeraho abafite inka n\'aho batuye' },
-  { num: '03', en: 'Register your cattle with tags', rw: 'Andika inka zawe hamwe n\'ibimenyetso' },
-  { num: '04', en: 'Track vaccinations & offspring', rw: 'Kurikirana inkinga n\'izakomotse' },
-  { num: '05', en: 'Manage transfers & slaughter', rw: 'Gucunga imigurire n\'inka zibazwa' },
+  { num: '02', en: 'Add owners & locations', rw: 'Ongeraho ba nyir\'inka n\'aho batuye' },
+  { num: '03', en: 'Register your cattle with tags', rw: 'Andika inka zawe hamwe n\'ibirango' },
+  { num: '04', en: 'Track vaccinations & offspring', rw: 'Kurikirana inkingo n\'inyana' },
+  { num: '05', en: 'Manage transfers & slaughter', rw: 'Gucunga ihererekanya n\'inka zibagwa' },
 ];
 
 const WelcomePage: React.FC = () => {
@@ -145,7 +145,7 @@ const WelcomePage: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button onClick={() => navigate('/register')}
               className="bg-yellow-400 hover:bg-yellow-300 text-green-950 font-bold px-8 py-3.5 rounded-xl text-base transition-all hover:scale-105 shadow-lg">
-              {L === 'en' ? '🚀 Create Free Account' : '🚀 Fungura Konti Kubure'}
+              {L === 'en' ? '🚀 Create Free Account' : '🚀 Fungura Konti ku Buntu'}
             </button>
             <button onClick={() => navigate('/login')}
               className="bg-white/10 border border-white/30 hover:bg-white/20 text-white font-semibold px-8 py-3.5 rounded-xl text-base transition-all">
@@ -156,7 +156,7 @@ const WelcomePage: React.FC = () => {
           {/* Stats bar */}
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
             {[
-              { val: '8', label: L === 'en' ? 'Core Features' : 'Ibikorwa Ngenderwaho' },
+              { val: '8', label: L === 'en' ? 'Core Features' : 'Ibikorwa Shingiro' },
               { val: '5', label: L === 'en' ? 'User Roles' : 'Inshingano z\'Abakoresha' },
               { val: '2', label: L === 'en' ? 'Languages' : 'Indimi' },
               { val: '∞', label: L === 'en' ? 'Cows Tracked' : 'Inka Zikurikiranwa' },
@@ -237,7 +237,7 @@ const WelcomePage: React.FC = () => {
               {L === 'en' ? 'Who Uses RwaCow?' : 'Nde Ukoresha RwaCow?'}
             </h2>
             <p className="text-green-300">
-              {L === 'en' ? 'Built for everyone in Rwanda\'s livestock ecosystem.' : 'Yakozwe kubona bose mu bucuruzi bw\'amatungo mu Rwanda.'}
+              {L === 'en' ? 'Built for everyone in Rwanda\'s livestock ecosystem.' : 'Yakorewe buri wese ukora mu by\'ubworozi bw\'amatungo mu Rwanda.'}
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -261,7 +261,7 @@ const WelcomePage: React.FC = () => {
           <p className="text-green-100 mb-8 text-lg">
             {L === 'en'
               ? 'Join Rwanda\'s cattle tracking platform today. Free to register.'
-              : 'Injira kuri sisitemu y\'gukurikirana inka mu Rwanda uyu munsi. Kwiyandikisha ni kubure.'}
+              : 'Injira kuri sisitemu yo gukurikirana inka mu Rwanda uyu munsi. Kwiyandikisha ni ku buntu.'}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button onClick={() => navigate('/register')}
@@ -270,7 +270,7 @@ const WelcomePage: React.FC = () => {
             </button>
             <button onClick={() => navigate('/login')}
               className="bg-white/20 border border-white/30 hover:bg-white/30 font-semibold px-8 py-3.5 rounded-xl text-base transition-all">
-              {L === 'en' ? 'I Already Have an Account' : 'Narafite Konti'}
+              {L === 'en' ? 'I Already Have an Account' : 'Mfite Konti'}
             </button>
           </div>
         </div>
@@ -282,8 +282,8 @@ const WelcomePage: React.FC = () => {
           <span className="text-xl">🐄</span>
           <span className="font-bold text-white">RwaCow</span>
         </div>
-        <p>Rwanda Cow Tracking System — {L === 'en' ? 'Empowering Rwandan Livestock Management' : 'Gutera Inkunga Gucunga Amatungo mu Rwanda'}</p>
-        <p className="mt-1 text-green-600">© {new Date().getFullYear()} RwaCow. {L === 'en' ? 'All rights reserved.' : 'Uburenganzira bwose burindirwa.'}</p>
+        <p>Rwanda Cow Tracking System — {L === 'en' ? 'Empowering Rwandan Livestock Management' : 'Guteza Imbere Imicungire y\'Amatungo mu Rwanda'}</p>
+        <p className="mt-1 text-green-600">© {new Date().getFullYear()} RwaCow. {L === 'en' ? 'All rights reserved.' : 'Uburenganzira bwose bwarabitswe.'}</p>
       </footer>
 
     </div>
