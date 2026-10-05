@@ -11,6 +11,7 @@ const slaughterRoutes = require('./routes/slaughter.routes');
 const transferRoutes = require('./routes/transfer.routes');
 const exportRoutes = require('./routes/export.routes');
 const ensureApprovalColumns = require('./database/ensureApprovalColumns');
+const ensureSlaughterAuth = require('./database/ensureSlaughterAuth');
 
 const app = express();
 
@@ -56,8 +57,9 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
-  // Ensure approval-workflow columns exist (safe, idempotent)
+  // Ensure workflow columns exist (safe, idempotent)
   await ensureApprovalColumns();
+  await ensureSlaughterAuth();
 });
 
 module.exports = app;

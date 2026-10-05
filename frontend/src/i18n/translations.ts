@@ -77,6 +77,8 @@ export const translations: Record<Language, Record<string, string>> = {
     scheduled: 'Scheduled',
     completed: 'Completed',
     cancelled: 'Cancelled',
+    pending_authorization: 'Awaiting Authorization',
+    authorized: 'Authorized',
     // Transfer
     transferOwnership: 'Transfer Ownership',
     previousOwner: 'Previous Owner',
@@ -182,6 +184,8 @@ export const translations: Record<Language, Record<string, string>> = {
     scheduled: 'Byateganyijwe',
     completed: 'Byarangiye',
     cancelled: 'Byahagaritswe',
+    pending_authorization: 'Bitegereje Uruhushya',
+    authorized: 'Byemejwe',
     // Guhererekanya (Transfer)
     transferOwnership: 'Guhererekanya Nyir\'inka',
     previousOwner: 'Uwari Nyir\'inka Mbere',

@@ -117,16 +117,37 @@ export function mockRequest(method: string, url: string, body?: unknown): MockRe
   }
 
   // ── SLAUGHTER ─────────────────────────────────
+  if (m === 'GET' && u.startsWith('slaughter/pending-auth/count')) {
+    const count = DEMO_SLAUGHTER.filter((s: any) => s.authorization_status === 'pending').length;
+    return { data: { count } };
+  }
   if (m === 'GET' && u.startsWith('slaughter')) {
     return { data: { records: DEMO_SLAUGHTER, total: DEMO_SLAUGHTER.length } };
   }
   if (m === 'POST' && u === 'slaughter') {
     const b = body as any;
-    const nr = { ...b, id: 'sla-' + Date.now(), status: 'scheduled' };
+    const nr = {
+      ...b, id: 'sla-' + Date.now(),
+      status: 'pending_authorization', authorization_status: 'pending',
+    };
     DEMO_SLAUGHTER.push(nr as any);
-    return { data: nr };
+    return { data: { ...nr, message: 'Cow registered. Awaiting veterinary authorization before slaughter.' } };
+  }
+  if (m === 'PUT' && u.includes('/authorize')) {
+    const id = u.split('/')[1];
+    const b = body as any;
+    const rec: any = DEMO_SLAUGHTER.find((s: any) => s.id === id);
+    if (rec) {
+      rec.authorization_status = b.decision;
+      rec.status = b.decision === 'authorized' ? 'authorized' : 'cancelled';
+      rec.authorized_by_name = 'You (Vet)';
+    }
+    return { data: { message: b.decision === 'authorized' ? 'Slaughter authorized.' : 'Slaughter rejected.', id } };
   }
   if (m === 'PUT' && u.includes('/confirm')) {
+    const id = u.split('/')[1];
+    const rec: any = DEMO_SLAUGHTER.find((s: any) => s.id === id);
+    if (rec) { rec.status = 'completed'; rec.slaughter_date = new Date().toISOString().split('T')[0]; }
     return { data: { status: 'completed' } };
   }
 

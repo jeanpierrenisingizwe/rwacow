@@ -19,7 +19,7 @@ const NAV_PERMISSIONS: Record<string, string[]> = {
   owners:      ['admin','government','vet'],
   vaccinations:['admin','government','vet','farmer'],
   offspring:   ['admin','government','vet','farmer'],
-  slaughter:   ['admin','government','slaughterhouse'],
+  slaughter:   ['admin','government','slaughterhouse','vet'],
   transfers:   ['admin','government','farmer'],
   export:      ['admin','government','vet','farmer'],
 };
@@ -44,6 +44,16 @@ const Layout: React.FC = () => {
   });
   const pendingCount = pendingData?.count || 0;
 
+  // Live count of slaughter requests awaiting vet authorization
+  const canAuthorizeSlaughter = isReviewer || role === 'vet';
+  const { data: slaughterAuthData } = useQuery({
+    queryKey: ['slaughter-auth-count'],
+    queryFn: () => api.get('/slaughter/pending-auth/count').then(r => r.data),
+    enabled: canAuthorizeSlaughter,
+    refetchInterval: 30000,
+  });
+  const slaughterAuthCount = slaughterAuthData?.count || 0;
+
   const allNavItems = [
     { to: '/dashboard',   icon: LayoutDashboard, key: 'dashboard',    label: t('dashboard') },
     { to: '/cows',        icon: Beef,            key: 'cows',         label: t('cows') },
@@ -51,7 +61,7 @@ const Layout: React.FC = () => {
     { to: '/owners',      icon: Users,           key: 'owners',       label: t('owners') },
     { to: '/vaccinations',icon: Syringe,         key: 'vaccinations', label: t('vaccinations') },
     { to: '/offspring',   icon: Baby,            key: 'offspring',    label: t('offspring') },
-    { to: '/slaughter',   icon: Scissors,        key: 'slaughter',    label: t('slaughter') },
+    { to: '/slaughter',   icon: Scissors,        key: 'slaughter',    label: t('slaughter'), badge: canAuthorizeSlaughter ? slaughterAuthCount : 0 },
     { to: '/transfers',   icon: ArrowLeftRight,  key: 'transfers',    label: t('transfers') },
     { to: '/export',      icon: Download,        key: 'export',       label: language === 'en' ? 'Export & Backup' : 'Kopa & Sobeka' },
   ];

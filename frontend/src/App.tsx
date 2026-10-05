@@ -25,7 +25,7 @@ const queryClient = new QueryClient({
 // Role permissions for frontend route guarding
 const ROUTE_ROLES: Record<string, string[]> = {
   owners:      ['admin', 'government', 'vet'],
-  slaughter:   ['admin', 'government', 'slaughterhouse'],
+  slaughter:   ['admin', 'government', 'slaughterhouse', 'vet'],
   transfers:   ['admin', 'government', 'farmer'],
   export:      ['admin', 'government', 'vet', 'farmer'],
   approvals:   ['admin', 'government'],

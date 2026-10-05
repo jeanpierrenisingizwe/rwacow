@@ -158,7 +158,11 @@ const migrate = async () => {
       slaughterhouse_location_id CHAR(36),
       reason VARCHAR(255),
       meat_weight_kg DECIMAL(8,2),
-      status VARCHAR(50) DEFAULT 'scheduled',
+      status VARCHAR(50) DEFAULT 'pending_authorization',
+      authorization_status VARCHAR(20) DEFAULT 'pending',
+      authorized_by CHAR(36),
+      authorized_at DATETIME,
+      authorization_notes TEXT,
       registered_by CHAR(36),
       notes TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -166,6 +170,7 @@ const migrate = async () => {
       FOREIGN KEY (cow_id) REFERENCES cows(id) ON DELETE CASCADE,
       FOREIGN KEY (owner_id) REFERENCES owners(id) ON DELETE SET NULL,
       FOREIGN KEY (slaughterhouse_location_id) REFERENCES locations(id) ON DELETE SET NULL,
+      FOREIGN KEY (authorized_by) REFERENCES users(id) ON DELETE SET NULL,
       FOREIGN KEY (registered_by) REFERENCES users(id) ON DELETE SET NULL
     ) ENGINE=InnoDB`,
   ];
